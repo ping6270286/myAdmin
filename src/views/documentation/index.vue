@@ -18,10 +18,10 @@ export default {
   methods: {
     play() {
       const mmedia = document.getElementById('mmedia')
-      if (mmedia.paused) { // 播放
+      if (mmedia.paused) {
         mmedia.play()
         this.value = '暂停'
-      } else { // 暂停
+      } else {
         mmedia.pause()
         this.value = '播放'
       }
