@@ -1,14 +1,18 @@
+
 <template>
-  <div class="demo">
-    <!-- <video id="mmedia" width="80%" src="../../assets/video/five-min.mp4" />
-    <br>
-    <input id="btn" type="button" value="播放" @click="play"> -->
-    <video-player
-      ref="videoPlayer"
-      class="video-player vjs-custom-skin"
-      :playsinline="true"
-      :options="playerOptions"
-    />
+  <div>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <div class="grid-content bg-purple">
+          <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+        </div>
+      </el-col>
+      <el-col :span="18">
+        <div class="grid-content bg-purple-video">
+          <video-player ref="videoPlayer" class="demo video-player vjs-custom-skin" :playsinline="true" :options="playerOptions" />
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -36,15 +40,12 @@ export default {
         fluid: true,
         sources: [
           {
-            // 类型
             type: 'video/mp4',
-            // url地址
-            src: '@/assets/video/five-min.mp4'
+            src: require('@/assets/video/demo1.mp4')
           }
         ],
         // 你的封面地址
         poster: '',
-        // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
         notSupportedMessage: '此视频暂无法播放，请稍后再试',
         controlBar: {
           timeDivider: true,
@@ -53,41 +54,107 @@ export default {
           // 全屏按钮
           fullscreenToggle: true
         }
+      },
+      data: [
+        {
+          label: '一级 1',
+          children: [
+            {
+              label: 'demo1',
+              src: require('@/assets/video/demo1.mp4')
+            }
+          ]
+        },
+        {
+          label: '一级 2',
+          children: [
+            {
+              label: 'demo2',
+              src: require('@/assets/video/demo2.mp4')
+            },
+            {
+              label: 'demo3',
+              src: require('@/assets/video/demo3.mp4')
+            }
+          ]
+        },
+        {
+          label: '一级 3',
+          children: [
+            {
+              label: '二级 3-1',
+              children: [
+                {
+                  label: 'demo4',
+                  src: require('@/assets/video/demo3.mp4')
+                }
+              ]
+            },
+            {
+              label: '二级 3-2',
+              children: [
+                {
+                  label: '三级 3-2-1'
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      defaultProps: {
+        children: 'children',
+        label: 'label'
       }
     }
   },
+  computed: {
+    player() {
+      return this.$refs.videoPlayer.player
+    }
+  },
   methods: {
-    play() {
-      const mmedia = document.getElementById('mmedia')
-      if (mmedia.paused) {
-        mmedia.play()
-        this.value = '暂停'
-      } else {
-        mmedia.pause()
-        this.value = '播放'
-      }
+    handleNodeClick(data) {
+      console.log(data.src)
+      this.$set(this.playerOptions.sources, 0, {
+        type: 'video/mp4',
+        src: data.src
+      })
+      this.player.muted(false)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.el-row {
+    margin: 20px auto;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+.el-col {
+    border-radius: 4px;
+}
+.bg-purple {
+    background: #d3dce6;
+}
+.bg-purple-video {
+    background: #fff;
+}
+.grid-content {
+    border-radius: 4px;
+    min-height: 600px;
+}
 .demo {
-    display: inline-block;
-    width: 800px;
-    height: 338px;
-    text-align: center;
-    line-height: 100px;
-    border: 1px solid transparent;
+    width: 95%;
     border-radius: 4px;
     overflow: hidden;
     background: #fff;
-    position: relative;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-    margin-right: 4px;
+    margin: 0 auto;
 }
-
-.demo:hover {
-    display: block;
+</style>
+<style>
+.el-tree {
+    background: #d3dce6;
 }
 </style>
