@@ -86,7 +86,7 @@ export default {
               children: [
                 {
                   label: 'demo4',
-                  src: require('@/assets/video/demo3.mp4')
+                  src: require('@/assets/video/demo4.mp4')
                 }
               ]
             },
@@ -114,12 +114,13 @@ export default {
   },
   methods: {
     handleNodeClick(data) {
-      console.log(data.src)
-      this.$set(this.playerOptions.sources, 0, {
-        type: 'video/mp4',
-        src: data.src
-      })
-      this.player.muted(false)
+      if (data.src) {
+        this.$set(this.playerOptions.sources, 0, {
+          type: 'video/mp4',
+          src: data.src
+        })
+        this.player.muted(false)
+      }
     }
   }
 }
